@@ -3,4 +3,4 @@ project(UndoRedoPool)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(UndoRedoPool main.cpp)
+add_executable(UndoRedoPool main.cpp UndoRedoClass.cpp UndoRedoPool.cpp)

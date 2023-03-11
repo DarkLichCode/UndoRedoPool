@@ -14,23 +14,12 @@ private:
 	std::function<void()> redoFunction;
 
 public:
-	void Undo() {
-		undoFunction();
-	}
+	void Undo();
 
-	void Redo() {
-		redoFunction();
-	}
+	void Redo();
 
 	template<class F, class... Args>
-	void MakeUndo(F&& f, Args&&... args) {
-
-		using return_type = typename std::result_of<F(Args...)>::type;
-
-		auto task = std::make_shared<std::function<return_type()>>(
-				std::bind(std::forward<F>(f), std::forward<Args>(args)...)
-		);
-	}
+	void MakeUndo(F&& f, Args&&... args);
 };
 
 
