@@ -6,7 +6,7 @@ C++实现的撤销重做函数管理池
 ```c++
 
 // 创建管理池
-UndoRedoPool undoRedoPool;
+std::shared_ptr<UndoRedoPool> undoRedoPool = UndoRedoPool::getInstance();
 // 创建新的撤销重做对象
 UndoRedoClass undoRedoClass;
 
@@ -15,11 +15,11 @@ undoRedoClass.MakeUndo(fun1, std::ref(x));
 undoRedoClass.MakeRedo(fun2, std::ref(x));
 
 // 将对象存入管理池中，由管理池来执行撤销和重做
-undoRedoPool.SaveUndoRedo(undoRedoClass);
+undoRedoPool->SaveUndoRedo(undoRedoClass);
 
 // 执行撤销
-undoRedoPool.Undo();
+undoRedoPool->Undo();
 // 执行重做
-undoRedoPool.Redo();
+undoRedoPool->Redo();
 ```
 
