@@ -6,20 +6,43 @@
 #define UNDOREDOPOOL_UNDOREDOPOOL_H
 
 #include <stack>
+#include <mutex>
 #include "UndoRedoClass.h"
+
+
 
 class UndoRedoPool {
 private:
 	std::stack<UndoRedoClass> undoStack;
 	std::stack<UndoRedoClass> redoStack;
+	static std::shared_ptr<UndoRedoPool> instance;
+	static std::mutex mtx;
+
+	UndoRedoPool() {}
 
 public:
+
+	static std::shared_ptr<UndoRedoPool> getInstance() {
+		//两个NULL可以提高获取实例效率
+		if (instance == nullptr) {
+			mtx.lock();
+			if (instance == nullptr) {
+				instance = std::shared_ptr<UndoRedoPool>(new UndoRedoPool());
+			}
+			mtx.unlock();
+		}
+		return instance;
+	}
+
 	void SaveUndoRedo(UndoRedoClass undoredo);
 	bool Undo();
 	bool Redo();
 	bool CanUndo();
 	bool CanRedo();
 };
+
+std::mutex UndoRedoPool::mtx;
+std::shared_ptr<UndoRedoPool> UndoRedoPool::instance = nullptr;
 
 // 添加UndoRedo的方法
 void UndoRedoPool::SaveUndoRedo(UndoRedoClass undoredo) {

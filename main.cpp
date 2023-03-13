@@ -6,13 +6,13 @@ struct test{
 	std::string name;
 };
 
-void fun1(test& a) {
-	a.id = 1;
+void fun1(test& a, int x) {
+	a.id += x;
 	a.name = "world";
 }
 
-void fun2(test& a) {
-	a.id = 0;
+void fun2(test& a, int x) {
+	a.id -= x;
 	a.name = "hello";
 }
 
@@ -28,20 +28,20 @@ int main() {
 			0, "hello"
 	};
 
-	UndoRedoPool undoRedoPool;
+	std::shared_ptr<UndoRedoPool> undoRedoPool = UndoRedoPool::getInstance();
 
 
 	printTest(x);
-	undoRedoClass.MakeUndo(fun1, std::ref(x));
-	undoRedoClass.MakeRedo(fun2, std::ref(x));
+	undoRedoClass.MakeUndo(fun1, std::ref(x), 5);
+	undoRedoClass.MakeRedo(fun2, std::ref(x), 5);;
 
-	undoRedoPool.SaveUndoRedo(undoRedoClass);
+	undoRedoPool->SaveUndoRedo(undoRedoClass);
 
-	std::cout<<undoRedoPool.Undo()<<std::endl;
+	std::cout<<undoRedoPool->Undo()<<std::endl;
 	printTest(x);
-	std::cout<<undoRedoPool.Redo()<<std::endl;
+	std::cout<<undoRedoPool->Redo()<<std::endl;
 	printTest(x);
-	std::cout<<undoRedoPool.Redo()<<std::endl;
+	std::cout<<undoRedoPool->Redo()<<std::endl;
 //	std::cout<<x<<std::endl;
 	return 0;
 }

@@ -9,9 +9,13 @@
 #include <future>
 #include <memory>
 
+// 撤销和重做的对象
 class UndoRedoClass {
 private:
+	// 撤销执行的函数
 	std::function<void()> undoFunction;
+
+	// 重做执行的函数
 	std::function<void()> redoFunction;
 
 public:
