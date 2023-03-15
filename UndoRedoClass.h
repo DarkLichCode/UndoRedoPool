@@ -5,6 +5,7 @@
 #ifndef UNDOREDOPOOL_UNDOREDOCLASS_H
 #define UNDOREDOPOOL_UNDOREDOCLASS_H
 
+#include <vector>
 #include <functional>
 #include <future>
 #include <memory>
@@ -13,10 +14,10 @@
 class UndoRedoClass {
 private:
 	// 撤销执行的函数
-	std::function<void()> undoFunction;
+	std::vector<std::function<void()>> undoFunction;
 
 	// 重做执行的函数
-	std::function<void()> redoFunction;
+	std::vector<std::function<void()>> redoFunction;
 
 public:
 	void Undo();
@@ -31,11 +32,17 @@ public:
 };
 
 void UndoRedoClass::Undo() {
-	undoFunction();
+	for (int i = 0; i < undoFunction.size(); ++i) {
+		std::function<void()> temp = undoFunction[i];
+		temp();
+	}
 }
 
 void UndoRedoClass::Redo() {
-	redoFunction();
+	for (int i = 0; i < redoFunction.size(); ++i) {
+		std::function<void()> temp = redoFunction[i];
+		temp();
+	}
 }
 
 template<class F, class... Args>
@@ -46,8 +53,7 @@ void UndoRedoClass::MakeUndo(F&& f, Args&&... args) {
 	auto task = std::function<return_type()>(
 			std::bind(std::forward<F>(f), std::forward<Args>(args)...)
 	);
-
-	undoFunction = task;
+	undoFunction.push_back(task);
 }
 
 template<class F, class... Args>
@@ -57,8 +63,7 @@ void UndoRedoClass::MakeRedo(F&& f, Args&&... args) {
 	auto task = std::function<return_type()>(
 			std::bind(std::forward<F>(f), std::forward<Args>(args)...)
 	);
-
-	redoFunction = task;
+	redoFunction.push_back(task);
 }
 
 #endif //UNDOREDOPOOL_UNDOREDOCLASS_H

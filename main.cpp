@@ -16,6 +16,11 @@ void fun2(test& a, int x) {
 	a.name = "hello";
 }
 
+void fun3(test& a) {
+	a.id -= 1;
+	a.name = "hello";
+}
+
 void printTest(test& a) {
 	std::cout<<a.id<<std::endl;
 	std::cout<<a.name<<std::endl;
@@ -31,17 +36,19 @@ int main() {
 	std::shared_ptr<UndoRedoPool> undoRedoPool = UndoRedoPool::getInstance();
 
 
-	printTest(x);
+//	printTest(x);
 	undoRedoClass.MakeUndo(fun1, std::ref(x), 5);
-	undoRedoClass.MakeRedo(fun2, std::ref(x), 5);;
+	undoRedoClass.MakeUndo(fun3, std::ref(x));
+	undoRedoClass.MakeRedo(fun2, std::ref(x), 5);
 
 	undoRedoPool->SaveUndoRedo(undoRedoClass);
 
+//	undoRedoPool->Undo();
 	std::cout<<undoRedoPool->Undo()<<std::endl;
 	printTest(x);
+//	undoRedoPool->Redo();
 	std::cout<<undoRedoPool->Redo()<<std::endl;
 	printTest(x);
 	std::cout<<undoRedoPool->Redo()<<std::endl;
-//	std::cout<<x<<std::endl;
 	return 0;
 }

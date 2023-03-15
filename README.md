@@ -13,8 +13,9 @@ std::shared_ptr<UndoRedoPool> undoRedoPool = UndoRedoPool::getInstance();
 UndoRedoClass undoRedoClass;
 
 // 撤销和重做函数放到对象中，如果要使用引用参数，使 std::ref将参数包裹
-undoRedoClass.MakeUndo(fun1, std::ref(x));
-undoRedoClass.MakeRedo(fun2, std::ref(x));
+undoRedoClass.MakeUndo(fun1, std::ref(x), 5);
+undoRedoClass.MakeUndo(fun3, std::ref(x));
+undoRedoClass.MakeRedo(fun2, std::ref(x), 5);
 
 // 将对象存入管理池中，由管理池来执行撤销和重做
 undoRedoPool->SaveUndoRedo(undoRedoClass);
