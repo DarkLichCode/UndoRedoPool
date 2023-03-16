@@ -6,6 +6,13 @@ struct test{
 	std::string name;
 };
 
+class testV {
+public:
+	void print() {
+		std::cout<<"hello world"<<std::endl;
+	}
+};
+
 void fun1(test& a, int x) {
 	a.id += x;
 	a.name = "world";
@@ -35,10 +42,12 @@ int main() {
 
 	std::shared_ptr<UndoRedoPool> undoRedoPool = UndoRedoPool::getInstance();
 
+	testV testa;
 
 //	printTest(x);
 	undoRedoClass.MakeUndo(fun1, std::ref(x), 5);
 	undoRedoClass.MakeUndo(fun3, std::ref(x));
+	undoRedoClass.MakeUndo(&testV::print, testa);
 	undoRedoClass.MakeRedo(fun2, std::ref(x), 5);
 
 	undoRedoPool->SaveUndoRedo(undoRedoClass);

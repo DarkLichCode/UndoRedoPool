@@ -25,4 +25,4 @@ undoRedoPool->Undo();
 // 执行重做
 undoRedoPool->Redo();
 ```
-
+具体用法请看main函数，也可以用于类的成员函数
